@@ -1,0 +1,34 @@
+The reason renaming the key to `id_rsa` works while using a custom name (like `ssh1309`) doesn't, is because of how SSH looks for identity files by default.
+
+### Default Behavior of SSH
+1. **Default Key Name**: When you attempt to connect to a remote server using SSH (like GitHub), the SSH client automatically looks for keys with default names such as `id_rsa`, `id_dsa`, `id_ecdsa`, and `id_ed25519` in the `~/.ssh/` directory.
+2. **Custom Names**: If you use a custom name (e.g., `ssh1309`), you must either specify the key explicitly every time you use it or configure the SSH client to recognize it.
+
+### How to Make Custom Keys Work
+If you want to use a custom-named SSH key and avoid renaming it every time, you can configure SSH to recognize your custom key. Here are a couple of ways to do that:
+
+#### 1. **Using the SSH Config File**
+- Create or modify your SSH configuration file (`~/.ssh/config`):
+  ```bash
+  nano ~/.ssh/config
+  ```
+- Add the following configuration:
+  ```
+  Host github.com
+      HostName github.com
+      User git
+      IdentityFile ~/.ssh/ssh1309
+  ```
+- This tells SSH to use `ssh1309` specifically for connections to GitHub.
+
+#### 2. **Specify the Key Explicitly When Connecting**
+- You can specify your custom key directly in your SSH command:
+  ```bash
+  ssh -i ~/.ssh/ssh1309 -T git@github.com
+  ```
+
+### Summary
+- **Default key names** (`id_rsa`, etc.) are automatically used by SSH, which is why you can connect without any additional configuration.
+- For custom-named keys, you must either specify the key in your SSH command or configure the SSH client to recognize your key by modifying the SSH config file.
+
+Using the configuration method is often the most convenient, as it allows you to keep your custom key name and use it seamlessly.
